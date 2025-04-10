@@ -1,0 +1,13 @@
+[Unit]
+Description=vlmcsd server
+After=network.target
+
+[Service]
+Type=forking
+# PIDFile=/run/vlmcsd.pid
+# ExecStartPre=/bin/rm -f /run/vlmcsd.pid
+ExecStart=/usr/local/bin/vlmcsd
+ExecStop=/bin/kill $MAINPID
+
+[Install]
+WantedBy=multi-user.target

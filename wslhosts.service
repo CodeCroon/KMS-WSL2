@@ -1,0 +1,10 @@
+[Unit]
+Description=wsl hosts setup
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /etc/init.wsl
+
+[Install]
+WantedBy=multi-user.target

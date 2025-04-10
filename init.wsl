@@ -1,0 +1,30 @@
+declare -l WSL_NAME=`cat /etc/issue | awk '{print $1}'`
+WSL_NAME=$WSL_NAME".wsl"
+WIN_NAME="windows.local"
+
+WSL_IP=`ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1 | awk '{print $2}'`
+WIN_IP=`cat /etc/resolv.conf | grep nameserver | awk '{print $2}'`
+
+WSL_HOST=$WSL_IP" "$WSL_NAME" # by wsl script"
+WIN_HOST=$WIN_IP" "$WIN_NAME" # by wsl script"
+
+cat /mnt/c/Windows/System32/drivers/etc/hosts > ~/hosts
+
+WSL_HOST_ORIGN=`cat ~/hosts | grep $WSL_NAME`
+WIN_HOST_ORIGN=`cat ~/hosts | grep $WIN_NAME`
+
+if [ -z "$WSL_HOST_ORIGN" ]
+then
+echo $WSL_HOST >> ~/hosts
+else
+sed -i "s/${WSL_HOST_ORIGN}/${WSL_HOST}/g" ~/hosts
+fi
+
+if [ -z "$WIN_HOST_ORIGN" ]
+then
+echo $WIN_HOST >> ~/hosts
+else
+sed -i "s/${WIN_HOST_ORIGN}/${WIN_HOST}/g" ~/hosts
+fi
+
+cat ~/hosts > /mnt/c/Windows/System32/drivers/etc/hosts
